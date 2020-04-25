@@ -1,0 +1,4 @@
+#!/bin/sh
+set -ev
+cd $(dirname $0)
+docker build -t mrcapptemplate:1 .

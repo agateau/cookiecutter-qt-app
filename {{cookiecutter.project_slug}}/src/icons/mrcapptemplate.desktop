@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Mr Cake App Template
+GenericName=Application template
+Comment=A simple Qt based application template
+Type=Application
+Exec=mrcapptemplate
+Icon=mrcapptemplate
+Terminal=false
+Categories=Qt;Utility;

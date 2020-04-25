@@ -1,0 +1,9 @@
+{
+    "full_name": "Aurélien Gâteau",
+    "email": "mail@agateau.com",
+    "organization_name": "agateau.com",
+    "project_name": "Qt App",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
+    "version": "0.1.0",
+    "project_url": "https://example.com/"
+}
