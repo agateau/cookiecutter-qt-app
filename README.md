@@ -16,7 +16,6 @@ As a developer you also get:
 
 - Unit-testing, using [Catch2][]
 - Code formatting, using clang-format
-- Organizing third-party code using submodules
 
 [Catch2]: https://github.com/catchorg/Catch2
 

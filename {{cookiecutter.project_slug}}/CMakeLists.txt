@@ -16,7 +16,7 @@ set(APPLIB_NAME ${PROJECT_NAME}lib)
 
 # Dependencies
 find_package(Qt5 CONFIG REQUIRED Core Widgets Test LinguistTools)
-add_subdirectory(3rdparty/catch2)
+find_package(Catch2 CONFIG REQUIRED)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual")
 set(CMAKE_CXX_STANDARD 17)
