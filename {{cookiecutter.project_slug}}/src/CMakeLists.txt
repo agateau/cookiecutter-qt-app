@@ -12,8 +12,9 @@ endfunction()
 
 # Sources
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/Config.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/BuildConfig.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/BuildConfig.h
+)
 
 set(APPLIB_SRCS
     MainWindow.cpp

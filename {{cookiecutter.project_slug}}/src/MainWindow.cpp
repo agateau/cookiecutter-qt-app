@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 
-#include "Config.h"
+#include "BuildConfig.h"
 #include "SettingsDialog.h"
 #include "ui_MainWindow.h"
 

@@ -7,7 +7,7 @@
 #include <QLocale>
 #include <QTranslator>
 
-#include "Config.h"
+#include "BuildConfig.h"
 
 static void loadTranslations(QObject* parent) {
     // Search in current path first, to give translators an easy way to test
