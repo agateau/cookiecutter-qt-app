@@ -18,12 +18,20 @@ set(APPLIB_NAME ${PROJECT_NAME}lib)
 find_package(Qt5 CONFIG REQUIRED Core Widgets Test LinguistTools)
 find_package(Catch2 CONFIG REQUIRED)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Woverloaded-virtual")
+# Build flags
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
+    add_compile_options(-Wall -Woverloaded-virtual)
+endif()
 set(CMAKE_CXX_STANDARD 17)
-enable_testing()
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 
+# Source dirs
 add_subdirectory(src)
 add_subdirectory(tests)
+
+enable_testing()
 
 # Packaging
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
