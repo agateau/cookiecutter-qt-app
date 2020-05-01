@@ -14,6 +14,8 @@ set(APP_URL "{{ cookiecutter.project_url }}")
 set(APP_NAME ${PROJECT_NAME})
 set(APPLIB_NAME ${PROJECT_NAME}lib)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 # Dependencies
 find_package(Qt5 CONFIG REQUIRED Core Widgets Test LinguistTools)
 find_package(Catch2 CONFIG REQUIRED)
