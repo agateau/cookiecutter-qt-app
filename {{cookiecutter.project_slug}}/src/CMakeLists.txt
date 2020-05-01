@@ -10,6 +10,44 @@ function(GET_INVERSE_ORGANIZATION_NAME ORGANIZATION_NAME OUTPUT)
     set(${OUTPUT} "${TMP}" PARENT_SCOPE)
 endfunction()
 
+# Generate a .qrc file to hold generated .qm files.
+# Takes .ts files as optional parameters
+function(CREATE_TRANSLATIONS_QRC TRANSLATIONS_QRC)
+    set(TS_FILES=${ARGN})
+
+    file(WRITE ${TRANSLATIONS_QRC} "<RCC>\n  <qresource prefix='/translations'>\n")
+    foreach(ts_file ${TS_FILES})
+        get_filename_component(name_we ${ts_file} NAME_WE)
+        file(APPEND ${TRANSLATIONS_QRC} "    <file>${name_we}.qm</file>\n")
+    endforeach()
+    file(APPEND ${TRANSLATIONS_QRC} "  </qresource>\n</RCC>\n")
+endfunction()
+
+# Create a target to build a source file containing all the translations.
+# Takes .ts files as optional parameters
+function(CREATE_TRANSLATIONS_BUILD_TARGET RES_SRCS_VARNAME)
+    set(TS_FILES=${ARGN})
+
+    # Add targets to build .ts files into .qm files
+    qt5_add_translation(QM_FILES ${TS_FILES})
+    add_custom_target(build_qm DEPENDS ${QM_FILES})
+
+    set(TRANSLATIONS_QRC ${CMAKE_CURRENT_BINARY_DIR}/translations.qrc)
+    create_translations_qrc(${TRANSLATIONS_QRC} ${TS_FILES})
+
+    set(RES_SRCS ${CMAKE_CURRENT_BINARY_DIR}/qrc_translations.cpp)
+
+    # Build the translations qrc. Declare the command ourselves instead of using
+    # CMake rcc automation so that we can tell CMake it depends on the "build_qm"
+    # target
+    add_custom_command(OUTPUT ${RES_SRCS}
+        COMMAND Qt5::rcc -o ${RES_SRCS} --name translations ${TRANSLATIONS_QRC}
+        DEPENDS build_qm
+    )
+
+    set(${RES_SRCS_VARNAME} "${RES_SRCS}" PARENT_SCOPE)
+endfunction()
+
 # Sources
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/BuildConfig.h.in
@@ -23,33 +61,27 @@ set(APPLIB_SRCS
     SettingsDialog.ui
 )
 
-qt5_add_resources(APPLIB_RESOURCES app.qrc)
+qt5_add_resources(APPLIB_RESOURCES_SRCS app.qrc)
 
 # Translations
-# NOTE: Add an entry to translations.qrc as well!
 set(TS_FILES
     translations/app_fr.ts
+    translations/app_es.ts
 )
+create_translations_build_target(TRANSLATIONS_RESOURCES_SRCS ${TS_FILES})
 
-# To update .ts (also builds .qm files)
-# Use "-locations none" so that .ts files do not change every time lines move
-# in source files: that results in noisy diffs
-qt5_create_translation(_TRANSLATION_UPDATE
-    ${APPLIB_SRCS}
-    ${TS_FILES}
-    OPTIONS -locations none
+# Add an "lupdate" target. Use this target to update the .ts files from the
+# latest source files.
+add_custom_target(lupdate
+    COMMAND Qt5::lupdate ${APPLIB_SRCS} -ts ${TS_FILES} -no-obsolete
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-add_custom_target(lupdate DEPENDS ${_TRANSLATION_UPDATE})
-
-set(TRANSLATIONS_QRC translations.qrc)
-configure_file(${TRANSLATIONS_QRC} ${TRANSLATIONS_QRC} COPYONLY)
-qt5_add_resources(TRANSLATIONS_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/${TRANSLATIONS_QRC})
 
 # App library
 add_library(${APPLIB_NAME} STATIC
     ${APPLIB_SRCS}
-    ${APPLIB_RESOURCES}
-    ${TRANSLATIONS_RESOURCES}
+    ${APPLIB_RESOURCES_SRCS}
+    ${TRANSLATIONS_RESOURCES_SRCS}
 )
 target_include_directories(${APPLIB_NAME} PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}
