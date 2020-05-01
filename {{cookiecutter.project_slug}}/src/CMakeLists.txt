@@ -18,6 +18,7 @@ configure_file(
 
 set(APPLIB_SRCS
     MainWindow.cpp
+    MainWindow.ui
     SettingsDialog.cpp
     SettingsDialog.ui
 )
