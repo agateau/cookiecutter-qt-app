@@ -29,9 +29,8 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 
 # Source dirs
 add_subdirectory(src)
+enable_testing() # must come *before* adding tests directory
 add_subdirectory(tests)
-
-enable_testing()
 
 # Packaging
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
