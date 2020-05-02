@@ -8,7 +8,7 @@ import shlex
 import sys
 
 from tempfile import TemporaryDirectory
-from subprocess import run
+from subprocess import run, CalledProcessError
 
 CUTTER_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,8 +20,12 @@ def check_run(cmd, **kwargs):
     kwargs = dict(kwargs)
     kwargs["check"] = True
     cmd_str = " ".join(shlex.quote(x) for x in cmd)
-    print(f"# Running {cmd_str}")
-    return run(cmd, **kwargs)
+    print(f"# Running '{cmd_str}'")
+    try:
+        return run(cmd, **kwargs)
+    except CalledProcessError:
+        print(f"# Command '{cmd_str}' failed")
+        sys.exit(1)
 
 
 def main():
