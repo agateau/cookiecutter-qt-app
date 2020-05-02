@@ -15,6 +15,12 @@ CUTTER_DIR = os.path.abspath(os.path.dirname(__file__))
 CMAKE_CMD = ["cmake", "-G", "Ninja"]
 NINJA_CMD = ["ninja"]
 
+TARGET_DICT = {
+    "lupdate": ["lupdate"],
+    "build": [],
+    "test": ["test"]
+}
+
 
 def check_run(cmd, **kwargs):
     kwargs = dict(kwargs)
@@ -29,6 +35,8 @@ def check_run(cmd, **kwargs):
 
 
 def main():
+    target_names = ", ".join(x for x in TARGET_DICT.keys())
+
     parser = argparse.ArgumentParser()
     parser.description = __doc__
 
@@ -41,7 +49,22 @@ def main():
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Pass -v argument to ninja")
 
+    parser.add_argument("targets", nargs="*",
+                        help="Targets to run. Must be a subset of:"
+                        f" {target_names}. Defaults to all targets.")
+
     args = parser.parse_args()
+    if args.targets:
+        targets = []
+        for name in args.targets:
+            try:
+                target = TARGET_DICT[name]
+            except KeyError:
+                print(f"Invalid target {name}")
+                return 1
+            targets.append(target)
+    else:
+        targets = TARGET_DICT.values()
 
     if args.verbose:
         NINJA_CMD.append("-v")
@@ -55,9 +78,8 @@ def main():
         os.chdir("qt-app")
         check_run(CMAKE_CMD + ["-B", "build"])
         os.chdir("build")
-        check_run(NINJA_CMD + ["lupdate"])
-        check_run(NINJA_CMD)
-        check_run(NINJA_CMD + ["test"])
+        for target in targets:
+            check_run(NINJA_CMD + target)
         if args.shell:
             check_run([os.environ["SHELL"]])
 
