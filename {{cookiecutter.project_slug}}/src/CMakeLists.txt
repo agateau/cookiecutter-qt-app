@@ -1,17 +1,5 @@
 include(translations)
 
-function(JOIN VALUES GLUE OUTPUT)
-    string(REPLACE ";" "${GLUE}" _TMP_STR "${VALUES}")
-    set(${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
-endfunction()
-
-function(GET_INVERSE_ORGANIZATION_NAME ORGANIZATION_NAME OUTPUT)
-    string(REPLACE "." ";" ORG_LIST ${ORGANIZATION_NAME})
-    list(REVERSE ORG_LIST)
-    JOIN("${ORG_LIST}" "." TMP)
-    set(${OUTPUT} "${TMP}" PARENT_SCOPE)
-endfunction()
-
 # Sources
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/BuildConfig.h.in
@@ -66,8 +54,6 @@ install(
     TARGETS ${APP_NAME}
     DESTINATION bin
 )
-
-GET_INVERSE_ORGANIZATION_NAME(${ORGANIZATION_NAME} INVERSE_ORGANIZATION_NAME)
 
 install(FILES icons/${APP_NAME}.desktop
     DESTINATION share/applications

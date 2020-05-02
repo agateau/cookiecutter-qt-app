@@ -18,7 +18,8 @@ NINJA_CMD = ["ninja"]
 TARGET_DICT = {
     "lupdate": ["lupdate"],
     "build": [],
-    "test": ["test"]
+    "test": ["test"],
+    "install": ["install"],
 }
 
 
@@ -73,15 +74,18 @@ def main():
         CMAKE_CMD.extend([f"-D{x}" for x in args.cmake])
 
     with TemporaryDirectory(prefix="cookiecutter-qt-app-") as temp_dir:
-        os.chdir(temp_dir)
-        check_run(["cookiecutter", CUTTER_DIR, "--no-input"])
-        os.chdir("qt-app")
-        check_run(CMAKE_CMD + ["-B", "build"])
-        os.chdir("build")
-        for target in targets:
-            check_run(NINJA_CMD + target)
-        if args.shell:
-            check_run([os.environ["SHELL"]])
+        try:
+            os.chdir(temp_dir)
+            check_run(["cookiecutter", CUTTER_DIR, "--no-input"])
+            prefix = os.path.join(temp_dir, "install")
+            os.chdir("qt-app")
+            check_run(CMAKE_CMD + ["-B", "build", f"-DCMAKE_INSTALL_PREFIX={prefix}"])
+            os.chdir("build")
+            for target in targets:
+                check_run(NINJA_CMD + target)
+        finally:
+            if args.shell:
+                check_run([os.environ["SHELL"]])
 
     return 0
 

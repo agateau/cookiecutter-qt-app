@@ -7,6 +7,7 @@ project({{ cookiecutter.project_slug }}
 set(AUTHOR_NAME "{{ cookiecutter.full_name }}")
 set(AUTHOR_EMAIL "{{ cookiecutter.email }}")
 set(ORGANIZATION_NAME "{{ cookiecutter.organization_name }}")
+set(INVERSE_ORGANIZATION_NAME "{{ cookiecutter.organization_name.split('.')|reverse|join('.') }}")
 
 set(APP_HUMAN_NAME "{{ cookiecutter.project_name }}")
 set(APP_URL "{{ cookiecutter.project_url }}")

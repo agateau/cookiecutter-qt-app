@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Mr Cake App Template
+Name={{ cookiecutter.project_name }}
 GenericName=Application template
 Comment=A simple Qt based application template
 Type=Application
-Exec=mrcapptemplate
-Icon=mrcapptemplate
+Exec={{ cookiecutter.project_slug }}
+Icon={{ cookiecutter.project_slug }}
 Terminal=false
 Categories=Qt;Utility;
