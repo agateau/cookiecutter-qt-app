@@ -1,5 +1,7 @@
 include(translations)
 
+add_subdirectory(icons)
+
 # Sources
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/BuildConfig.h.in
@@ -55,12 +57,7 @@ install(
     DESTINATION bin
 )
 
-install(FILES icons/${APP_NAME}.desktop
+install(FILES packaging/linux/${APP_NAME}.desktop
     DESTINATION share/applications
     RENAME ${INVERSE_ORGANIZATION_NAME}.${APP_NAME}.desktop
-)
-
-install(FILES icons/appicon.svg
-    DESTINATION share/icons/hicolor/scalable/apps
-    RENAME ${APP_NAME}.svg
 )

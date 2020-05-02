@@ -20,6 +20,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # Dependencies
 find_package(Qt5 CONFIG REQUIRED Core Widgets Test LinguistTools)
 find_package(Catch2 CONFIG REQUIRED)
+find_package(ECM REQUIRED NO_MODULE)
+list(APPEND CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 # Build flags
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)

@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/appicon.svg</file>
+        <file>icons/sc-apps-{{ cookiecutter.project_slug }}.svg</file>
     </qresource>
 </RCC>
