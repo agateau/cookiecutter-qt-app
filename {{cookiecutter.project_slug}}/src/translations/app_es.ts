@@ -6,17 +6,17 @@
     <message>
         <location filename="../MainWindow.ui" line="28"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="38"/>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Settings</source>
+        <translation>&amp;Configuración</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="43"/>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Quit</source>
+        <translation>&amp;Salir</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../SettingsDialog.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración</translation>
     </message>
     <message>
         <location filename="../SettingsDialog.ui" line="24"/>

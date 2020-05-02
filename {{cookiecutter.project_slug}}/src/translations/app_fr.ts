@@ -9,11 +9,15 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Configuration</translation>
+        <translation type="obsolete">Configuration</translation>
     </message>
     <message>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Settings</source>
+        <translation>&amp;Configuration</translation>
+    </message>
+    <message>
+        <source>&amp;Quit</source>
+        <translation>&amp;Quitter</translation>
     </message>
 </context>
 <context>
@@ -24,11 +28,11 @@
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <source>More Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Plus de configuration</translation>
     </message>
 </context>
 </TS>
