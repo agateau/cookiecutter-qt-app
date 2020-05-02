@@ -48,7 +48,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 )
 
 target_link_libraries(${APP_NAME}
-    ${PROJECT_NAME}lib
+    ${APPLIB_NAME}
 )
 
 # Install
