@@ -25,3 +25,8 @@ Build it:
     sudo make install
 
 You can also build rpm and deb files using `make package` after `make`.
+{% if cookiecutter.license != "Other" %}
+
+## License
+
+Released under {{ cookiecutter.license }}.{% endif %}

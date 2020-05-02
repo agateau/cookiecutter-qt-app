@@ -5,5 +5,12 @@
     "project_name": "Qt App",
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
     "version": "0.1.0",
-    "project_url": "https://example.com/"
+    "project_url": "https://example.com/",
+    "license": [
+        "GPL v3",
+        "MIT",
+        "BSD 3-Clause",
+        "Apache License 2.0",
+        "Other"
+    ]
 }
