@@ -51,6 +51,7 @@ def main():
         os.chdir("qt-app")
         check_run(CMAKE_CMD + ["-B", "build"])
         os.chdir("build")
+        check_run(NINJA_CMD + ["lupdate"])
         check_run(NINJA_CMD)
         check_run(NINJA_CMD + ["test"])
         if args.shell:

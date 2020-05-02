@@ -1,3 +1,5 @@
+include(translations)
+
 function(JOIN VALUES GLUE OUTPUT)
     string(REPLACE ";" "${GLUE}" _TMP_STR "${VALUES}")
     set(${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
@@ -18,37 +20,26 @@ configure_file(
 
 set(APPLIB_SRCS
     MainWindow.cpp
+    MainWindow.ui
     SettingsDialog.cpp
     SettingsDialog.ui
 )
 
-qt5_add_resources(APPLIB_RESOURCES app.qrc)
+qt5_add_resources(APPLIB_RESOURCES_SRCS app.qrc)
 
 # Translations
-# NOTE: Add an entry to translations.qrc as well!
 set(TS_FILES
     translations/app_fr.ts
+    translations/app_es.ts
 )
-
-# To update .ts (also builds .qm files)
-# Use "-locations none" so that .ts files do not change every time lines move
-# in source files: that results in noisy diffs
-qt5_create_translation(_TRANSLATION_UPDATE
-    ${APPLIB_SRCS}
-    ${TS_FILES}
-    OPTIONS -locations none
-)
-add_custom_target(lupdate DEPENDS ${_TRANSLATION_UPDATE})
-
-set(TRANSLATIONS_QRC translations.qrc)
-configure_file(${TRANSLATIONS_QRC} ${TRANSLATIONS_QRC} COPYONLY)
-qt5_add_resources(TRANSLATIONS_RESOURCES ${CMAKE_CURRENT_BINARY_DIR}/${TRANSLATIONS_QRC})
+add_translations_build_target(TRANSLATIONS_RESOURCES_SRCS ${TS_FILES})
+add_lupdate_target(SOURCES ${APPLIB_SRCS} TS_FILES ${TS_FILES} OPTIONS -no-obsolete)
 
 # App library
 add_library(${APPLIB_NAME} STATIC
     ${APPLIB_SRCS}
-    ${APPLIB_RESOURCES}
-    ${TRANSLATIONS_RESOURCES}
+    ${APPLIB_RESOURCES_SRCS}
+    ${TRANSLATIONS_RESOURCES_SRCS}
 )
 target_include_directories(${APPLIB_NAME} PUBLIC
     ${CMAKE_CURRENT_BINARY_DIR}

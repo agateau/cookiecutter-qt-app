@@ -16,7 +16,7 @@ static void loadTranslations(QObject* parent) {
     auto translator = new QTranslator(parent);
     QLocale locale;
     for (const auto& dir : searchDirs) {
-        if (translator->load(locale, QCoreApplication::applicationName(), "_", dir)) {
+        if (translator->load(locale, "app", "_", dir)) {
             QCoreApplication::installTranslator(translator);
             return;
         }
