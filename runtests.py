@@ -12,8 +12,7 @@ from subprocess import run, CalledProcessError
 
 CUTTER_DIR = os.path.abspath(os.path.dirname(__file__))
 
-CMAKE_CMD = ["cmake", "-G", "Ninja"]
-NINJA_CMD = ["ninja"]
+CMAKE_CMD = ["cmake"]
 
 TARGET_DICT = {
     "lupdate": ["lupdate"],
@@ -48,7 +47,7 @@ def main():
                         help="Additional cmake cache entry")
 
     parser.add_argument("-v", "--verbose", action="store_true",
-                        help="Pass -v argument to ninja")
+                        help="Verbose output")
 
     parser.add_argument("targets", nargs="*",
                         help="Targets to run. Must be a subset of:"
@@ -67,22 +66,27 @@ def main():
     else:
         targets = TARGET_DICT.values()
 
-    if args.verbose:
-        NINJA_CMD.append("-v")
+    cmake_config_args = ["-B", "build"]
 
     if args.cmake:
-        CMAKE_CMD.extend([f"-D{x}" for x in args.cmake])
+        cmake_config_args.extend([f"-D{x}" for x in args.cmake])
+
+    cmake_build_args = ["--build", "build"]
+    if args.verbose:
+        cmake_build_args.append("-v")
 
     with TemporaryDirectory(prefix="cookiecutter-qt-app-") as temp_dir:
         try:
             os.chdir(temp_dir)
-            check_run(["python3", "-m", "cookiecutter", CUTTER_DIR, "--no-input"])
+            check_run(["python3", "-m", "cookiecutter", CUTTER_DIR,
+                       "--no-input"])
             prefix = os.path.join(temp_dir, "install")
             os.chdir("qt-app")
-            check_run(CMAKE_CMD + ["-B", "build", f"-DCMAKE_INSTALL_PREFIX={prefix}"])
-            os.chdir("build")
+            check_run(CMAKE_CMD + cmake_config_args
+                      + [f"-DCMAKE_INSTALL_PREFIX={prefix}"])
             for target in targets:
-                check_run(NINJA_CMD + target)
+                check_run(CMAKE_CMD + cmake_build_args
+                          + ["--target"] + target)
         finally:
             if args.shell:
                 check_run([os.environ["SHELL"]])
