@@ -4,6 +4,7 @@ Test the cookiecutter
 """
 import argparse
 import os
+import platform
 import shlex
 import sys
 
@@ -14,12 +15,16 @@ CUTTER_DIR = os.path.abspath(os.path.dirname(__file__))
 
 CMAKE_CMD = ["cmake"]
 
-TARGET_DICT = {
-    "lupdate": ["lupdate"],
-    "build": [],
-    "test": ["test"],
-    "install": ["install"],
-}
+CTEST_CMD = ["ctest", "--verbose"]
+
+TARGETS = ["lupdate", "build", "test", "install"]
+
+
+def get_test_cmd():
+    cmd = CTEST_CMD
+    if platform.system() == "Linux" and "DISPLAY" not in os.environ:
+        cmd = ["xvfb-run"] + cmd
+    return cmd
 
 
 def check_run(cmd, **kwargs):
@@ -35,7 +40,7 @@ def check_run(cmd, **kwargs):
 
 
 def main():
-    target_names = ", ".join(x for x in TARGET_DICT.keys())
+    target_names = ", ".join(TARGETS)
 
     parser = argparse.ArgumentParser()
     parser.description = __doc__
@@ -57,14 +62,13 @@ def main():
     if args.targets:
         targets = []
         for name in args.targets:
-            try:
-                target = TARGET_DICT[name]
-            except KeyError:
+            if name in TARGETS:
+                targets.append(name)
+            else:
                 print(f"Invalid target {name}")
                 return 1
-            targets.append(target)
     else:
-        targets = TARGET_DICT.values()
+        targets = TARGETS
 
     cmake_config_args = []
 
@@ -74,6 +78,13 @@ def main():
     cmake_build_args = ["--build", "."]
     if args.verbose:
         cmake_build_args.append("-v")
+
+    target_dict = {
+        "lupdate": CMAKE_CMD + cmake_build_args + ["--target", "lupdate"],
+        "build": CMAKE_CMD + cmake_build_args,
+        "test": get_test_cmd(),
+        "install": CMAKE_CMD + cmake_build_args + ["--target", "install"],
+    }
 
     with TemporaryDirectory(prefix="cookiecutter-qt-app-") as temp_dir:
         try:
@@ -87,8 +98,7 @@ def main():
             check_run(CMAKE_CMD + cmake_config_args
                       + [f"-DCMAKE_INSTALL_PREFIX={prefix}", ".."])
             for target in targets:
-                check_run(CMAKE_CMD + cmake_build_args
-                          + ["--target"] + target)
+                check_run(target_dict[target])
         finally:
             if args.shell:
                 check_run([os.environ["SHELL"]])
