@@ -19,19 +19,26 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          # - macos-latest
-          # - windows-latest
+          - macos-latest
+          - windows-latest
         include:
           - os: ubuntu-latest
             triplet: x64-linux
-          # - os: windows-latest
-          #   triplet: x64-windows
-          # - os: macos-latest
-          #   triplet: x64-osx
+          - os: windows-latest
+            triplet: x64-windows
+          - os: macos-latest
+            triplet: x64-osx
 
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: ci/install-dependencies
+        run: ci/install-dependencies $GITHUB_WORKSPACE/inst $GITHUB_WORKSPACE/env
+        shell: bash
       - name: Run test script
-        run: python3 runtests.py -DCMAKE_PREFIX_PATH=$HOME/inst
+        run: |
+          echo "[env content]"
+          cat $GITHUB_WORKSPACE/env
+          echo "[/env content]"
+          . $GITHUB_WORKSPACE/env
+          $PYTHON_CMD runtests.py -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/inst
+        shell: bash

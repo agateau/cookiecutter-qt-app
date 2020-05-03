@@ -13,6 +13,8 @@ from subprocess import run, CalledProcessError
 
 CUTTER_DIR = os.path.abspath(os.path.dirname(__file__))
 
+COOKIECUTTER_CMD = [sys.executable, "-m", "cookiecutter"]
+
 CMAKE_CMD = ["cmake"]
 
 CTEST_CMD = ["ctest", "--verbose"]
@@ -89,8 +91,7 @@ def main():
     with TemporaryDirectory(prefix="cookiecutter-qt-app-") as temp_dir:
         try:
             os.chdir(temp_dir)
-            check_run(["python3", "-m", "cookiecutter", CUTTER_DIR,
-                       "--no-input"])
+            check_run(COOKIECUTTER_CMD + [CUTTER_DIR, "--no-input"])
             prefix = os.path.join(temp_dir, "install")
             build_dir = os.path.join("qt-app", "build")
             os.mkdir(build_dir)
