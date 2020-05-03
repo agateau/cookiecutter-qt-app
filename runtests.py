@@ -66,12 +66,12 @@ def main():
     else:
         targets = TARGET_DICT.values()
 
-    cmake_config_args = ["-B", "build"]
+    cmake_config_args = []
 
     if args.cmake:
         cmake_config_args.extend([f"-D{x}" for x in args.cmake])
 
-    cmake_build_args = ["--build", "build"]
+    cmake_build_args = ["--build", "."]
     if args.verbose:
         cmake_build_args.append("-v")
 
@@ -81,9 +81,11 @@ def main():
             check_run(["python3", "-m", "cookiecutter", CUTTER_DIR,
                        "--no-input"])
             prefix = os.path.join(temp_dir, "install")
-            os.chdir("qt-app")
+            build_dir = os.path.join("qt-app", "build")
+            os.mkdir(build_dir)
+            os.chdir(build_dir)
             check_run(CMAKE_CMD + cmake_config_args
-                      + [f"-DCMAKE_INSTALL_PREFIX={prefix}"])
+                      + [f"-DCMAKE_INSTALL_PREFIX={prefix}", ".."])
             for target in targets:
                 check_run(CMAKE_CMD + cmake_build_args
                           + ["--target"] + target)
