@@ -1,0 +1,35 @@
+#!/bin/bash
+set -exuo pipefail
+
+INST_DIR=$HOME/inst
+
+install_packages() {
+    sudo apt-get install -y --no-install-recommends \
+        cmake \
+        extra-cmake-modules \
+        qtbase5-dev \
+        qttools5-dev \
+        xvfb
+}
+
+install_catch2() {
+    git clone --depth 1 https://github.com/catchorg/Catch2.git
+    (
+        cd Catch2
+        mkdir build
+        cd build
+        cmake -DCMAKE_INSTALL_PREFIX=$INST_DIR -DBUILD_TESTING=OFF ..
+        cmake --build .
+        cmake --build . --target install
+    )
+}
+
+install_runtest_deps() {
+    python3 -m pip install --upgrade pip
+    python3 -m pip install setuptools
+    python3 -m pip install -r requirements.txt
+}
+
+install_packages
+install_catch2
+install_runtest_deps
