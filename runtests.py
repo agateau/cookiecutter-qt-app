@@ -76,7 +76,7 @@ def main():
     with TemporaryDirectory(prefix="cookiecutter-qt-app-") as temp_dir:
         try:
             os.chdir(temp_dir)
-            check_run(["cookiecutter", CUTTER_DIR, "--no-input"])
+            check_run(["python3", "-m", "cookiecutter", CUTTER_DIR, "--no-input"])
             prefix = os.path.join(temp_dir, "install")
             os.chdir("qt-app")
             check_run(CMAKE_CMD + ["-B", "build", f"-DCMAKE_INSTALL_PREFIX={prefix}"])
