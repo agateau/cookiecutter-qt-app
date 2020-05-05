@@ -6,9 +6,9 @@ import argparse
 import os
 import platform
 import shlex
+import shutil
 import sys
 
-from tempfile import TemporaryDirectory
 from subprocess import run, CalledProcessError
 
 CUTTER_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -38,7 +38,7 @@ def check_run(cmd, **kwargs):
         return run(cmd, **kwargs)
     except CalledProcessError:
         print(f"# Command '{cmd_str}' failed")
-        sys.exit(1)
+        raise
 
 
 def main():
@@ -46,9 +46,6 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.description = __doc__
-
-    parser.add_argument("-s", "--shell", action="store_true",
-                        help="Run a shell at the end")
 
     parser.add_argument("-D", dest="cmake", action="append",
                         help="Additional cmake cache entry")
@@ -88,21 +85,25 @@ def main():
         "install": CMAKE_CMD + cmake_build_args + ["--target", "install"],
     }
 
-    with TemporaryDirectory(prefix="cookiecutter-qt-app-") as temp_dir:
-        try:
-            os.chdir(temp_dir)
-            check_run(COOKIECUTTER_CMD + [CUTTER_DIR, "--no-input"])
-            prefix = os.path.join(temp_dir, "install")
-            build_dir = os.path.join("qt-app", "build")
-            os.mkdir(build_dir)
-            os.chdir(build_dir)
-            check_run(CMAKE_CMD + cmake_config_args
-                      + [f"-DCMAKE_INSTALL_PREFIX={prefix}", ".."])
-            for target in targets:
-                check_run(target_dict[target])
-        finally:
-            if args.shell:
-                check_run([os.environ["SHELL"]])
+    work_dir = os.path.join(os.getcwd(), "_work")
+    if os.path.exists(work_dir):
+        shutil.rmtree(work_dir)
+    os.mkdir(work_dir)
+    os.chdir(work_dir)
+
+    try:
+        check_run(COOKIECUTTER_CMD + [CUTTER_DIR, "--no-input"])
+        prefix = os.path.join(work_dir, "install")
+        build_dir = os.path.join("qt-app", "build")
+        os.mkdir(build_dir)
+        os.chdir(build_dir)
+        check_run(CMAKE_CMD + cmake_config_args
+                  + [f"-DCMAKE_INSTALL_PREFIX={prefix}", ".."])
+        for target in targets:
+            check_run(target_dict[target])
+    except CalledProcessError:
+        # Avoid printing the stack trace
+        return 1
 
     return 0
 
