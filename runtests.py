@@ -17,16 +17,16 @@ COOKIECUTTER_CMD = [sys.executable, "-m", "cookiecutter"]
 
 CMAKE_CMD = ["cmake"]
 
-CTEST_CMD = ["ctest", "--verbose"]
+CTEST_CMD = ["ctest", "--verbose", "--build-config", "Debug"]
 
 TARGETS = ["lupdate", "build", "test", "install"]
 
 
-def get_test_cmd():
-    cmd = CTEST_CMD
+def wrap_ui_cmd(cmd):
     if platform.system() == "Linux" and "DISPLAY" not in os.environ:
-        cmd = ["xvfb-run"] + cmd
-    return cmd
+        return ["xvfb-run"] + cmd
+    else:
+        return cmd
 
 
 def check_run(cmd, **kwargs):
@@ -81,7 +81,7 @@ def main():
     target_dict = {
         "lupdate": CMAKE_CMD + cmake_build_args + ["--target", "lupdate"],
         "build": CMAKE_CMD + cmake_build_args,
-        "test": get_test_cmd(),
+        "test": wrap_ui_cmd(CTEST_CMD),
         "install": CMAKE_CMD + cmake_build_args + ["--target", "install"],
     }
 
