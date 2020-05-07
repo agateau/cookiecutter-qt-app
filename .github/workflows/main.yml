@@ -1,0 +1,44 @@
+name: main
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - wip/ci
+    tags: "[0-9]*"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONUNBUFFERED: 1
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        include:
+          - os: ubuntu-latest
+            triplet: x64-linux
+          - os: windows-latest
+            triplet: x64-windows
+          - os: macos-latest
+            triplet: x64-osx
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: ci/install-dependencies $GITHUB_WORKSPACE/inst $GITHUB_WORKSPACE/env
+        shell: bash
+      - name: Run test script
+        run: |
+          echo "[env content]"
+          cat $GITHUB_WORKSPACE/env
+          echo "[/env content]"
+          . $GITHUB_WORKSPACE/env
+          $PYTHON_CMD runtests.py -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/inst
+        shell: bash

@@ -3,6 +3,7 @@ project({{ cookiecutter.project_slug }}
     VERSION {{ cookiecutter.version }}
     DESCRIPTION "Opinionated Qt-based application template"
 )
+include(CTest)
 
 set(AUTHOR_NAME "{{ cookiecutter.full_name }}")
 set(AUTHOR_EMAIL "{{ cookiecutter.email }}")
@@ -34,8 +35,10 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 
 # Source dirs
 add_subdirectory(src)
-enable_testing() # must come *before* adding tests directory
-add_subdirectory(tests)
+if (BUILD_TESTING)
+    enable_testing() # must come *before* adding tests directory
+    add_subdirectory(tests)
+endif()
 
 # Packaging
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
