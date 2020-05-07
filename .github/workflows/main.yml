@@ -24,14 +24,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: ci/install-dependencies $GITHUB_WORKSPACE/inst $GITHUB_WORKSPACE/env
-        shell: bash
-      - name: Run test script
-        run: |
-          echo "[env content]"
-          cat $GITHUB_WORKSPACE/env
-          echo "[/env content]"
-          . $GITHUB_WORKSPACE/env
-          $PYTHON_CMD runtests.py -DCMAKE_PREFIX_PATH=$GITHUB_WORKSPACE/inst
+      - name: Build
+        run: ci/build
         shell: bash

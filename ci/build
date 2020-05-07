@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euo pipefail
+
+COOKIECUTTER_VERSION=1.7.2
+
+pushd $PWD > /dev/null
+cd $(dirname $0)/..
+SRC_DIR=$PWD
+popd > /dev/null
+PROJECT_DIR="$SRC_DIR/{{cookiecutter.project_slug}}"
+
+. $PROJECT_DIR/ci/common.sh
+
+echo_title "Installing cookiecutter"
+$PYTHON_CMD -m pip install --upgrade pip setuptools
+$PYTHON_CMD -m pip install cookiecutter==$COOKIECUTTER_VERSION
+
+echo_title "Cutting the cookie"
+rm -rf _work
+mkdir _work
+cd _work
+$PYTHON_CMD -m cookiecutter $SRC_DIR --no-input
+
+echo_title "Running the cookie CI scripts"
+cd qt-app
+ci/install-dependencies deps_dir
+. deps_dir/env.sh
+ci/build

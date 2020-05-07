@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euo pipefail
+
+pushd $PWD > /dev/null
+cd $(dirname $0)/..
+SRC_DIR=$PWD
+popd > /dev/null
+
+. $SRC_DIR/ci/common.sh
+
+mkdir build
+cd build
+
+echo_title Configuring
+cmake -DCMAKE_INSTALL_PREFIX=../inst ..
+
+echo_title Updating translations
+cmake --build . --target lupdate
+
+echo_title Building
+cmake --build .
+
+echo_title Running tests
+test_cmd="ctest --verbose -C Debug"
+if is_linux && [ -z "${DISPLAY:-}" ] ; then
+    xvfb-run $test_cmd
+else
+    $test_cmd
+fi
+
+echo_title Installing
+cmake --build . --target install
+
