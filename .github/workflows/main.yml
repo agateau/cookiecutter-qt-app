@@ -1,13 +1,6 @@
 name: main
 
-on:
-  push:
-    branches:
-      - master
-      - dev
-      - wip/ci
-    tags: "[0-9]*"
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   build:
