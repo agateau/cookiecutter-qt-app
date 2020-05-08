@@ -1,3 +1,7 @@
+add_custom_target(check
+    COMMAND ${CMAKE_CTEST_COMMAND} --verbose --build-config "$<CONFIG>"
+)
+
 add_executable(tests
     tests.cpp
     ExampleTest.cpp
@@ -10,3 +14,6 @@ target_link_libraries(tests
 )
 
 add_test(NAME tests COMMAND tests)
+
+# Before running tests, make sure tests they are built if necessary
+add_dependencies(check tests)

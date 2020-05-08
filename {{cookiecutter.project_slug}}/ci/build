@@ -21,7 +21,7 @@ echo_title Building
 cmake --build .
 
 echo_title Running tests
-test_cmd="ctest --verbose -C Debug"
+test_cmd="cmake --build . --target check"
 if is_linux && [ -z "${DISPLAY:-}" ] ; then
     xvfb-run $test_cmd
 else
