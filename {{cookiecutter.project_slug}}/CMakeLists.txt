@@ -20,7 +20,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Dependencies
 find_package(Qt5 CONFIG REQUIRED Core Widgets Test LinguistTools)
-find_package(Catch2 CONFIG REQUIRED)
 find_package(ECM REQUIRED NO_MODULE)
 list(APPEND CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
@@ -34,6 +33,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
 
 # Source dirs
+add_subdirectory(third-party)
 add_subdirectory(src)
 if (BUILD_TESTING)
     enable_testing() # must come *before* adding tests directory

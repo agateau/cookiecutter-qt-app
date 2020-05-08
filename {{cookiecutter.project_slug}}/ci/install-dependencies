@@ -58,19 +58,6 @@ install_linux_packages() {
         xvfb
 }
 
-install_catch2() {
-    echo_title "Installing Catch2"
-    git clone --depth 1 https://github.com/catchorg/Catch2.git
-    (
-        cd Catch2
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=$INST_DIR -DBUILD_TESTING=OFF ..
-        cmake --build .
-        cmake --build . --target install
-    )
-}
-
 install_ecm() {
     echo_title "Installing ECM"
     git clone --depth 1 https://anongit.kde.org/extra-cmake-modules.git -b v$ECM_VERSION
@@ -132,5 +119,3 @@ windows)
     install_windows_packages
     ;;
 esac
-
-install_catch2
