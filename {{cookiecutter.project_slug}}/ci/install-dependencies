@@ -12,6 +12,8 @@ QT_VERSION=5.12.8
 
 ECM_VERSION=5.69.0
 
+CMAKE_VERSION=3.17.\*
+
 . $CI_DIR/lib/common.sh
 
 add_env_var() {
@@ -22,6 +24,11 @@ add_env_var() {
 prepend_path() {
     echo "export PATH=$1:\$PATH" >> $ENV_FILE
     export PATH=$1:$PATH
+}
+
+install_cmake() {
+    echo_title "Installing CMake"
+    $PYTHON_CMD -m pip install cmake==$CMAKE_VERSION
 }
 
 install_qt() {
@@ -51,7 +58,6 @@ install_qt() {
 install_linux_packages() {
     echo_title "Installing Linux packages"
     sudo apt-get install -y --no-install-recommends \
-        cmake \
         extra-cmake-modules \
         qtbase5-dev \
         qttools5-dev \
@@ -96,17 +102,19 @@ cd $INST_DIR
 INST_DIR=$PWD
 popd
 
+if is_windows ; then
+    INST_DIR=$(cygpath $INST_DIR)
+fi
+
 ENV_FILE=$INST_DIR/env.sh
 
 rm -f $ENV_FILE
 touch $ENV_FILE
-if is_windows ; then
-    INST_DIR=$(cygpath $INST_DIR)
-    ENV_FILE=$(cygpath $ENV_FILE)
-fi
 
 add_env_var CMAKE_INSTALL_PREFIX $INST_DIR
 add_env_var CMAKE_PREFIX_PATH $INST_DIR
+
+install_cmake
 
 case "$OS" in
 linux)

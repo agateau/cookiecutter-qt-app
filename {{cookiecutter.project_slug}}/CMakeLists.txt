@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.17)
 project({{ cookiecutter.project_slug }}
     VERSION {{ cookiecutter.version }}
     DESCRIPTION "Opinionated Qt-based application template"
