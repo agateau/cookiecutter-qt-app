@@ -1,2 +1,0 @@
-#!/bin/sh
-docker run -v $PWD:/root/src mrcapptemplate:1 /root/src/ci/build-app
