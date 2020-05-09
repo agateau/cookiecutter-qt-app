@@ -9,7 +9,7 @@ SRC_DIR=$PWD
 popd > /dev/null
 PROJECT_DIR="$SRC_DIR/{{cookiecutter.project_slug}}"
 
-. $PROJECT_DIR/ci/common.sh
+. $PROJECT_DIR/ci/lib/common.sh
 
 echo_title "Installing cookiecutter"
 $PYTHON_CMD -m pip install --upgrade pip setuptools

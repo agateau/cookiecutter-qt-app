@@ -6,7 +6,7 @@ cd $(dirname $0)/..
 SRC_DIR=$PWD
 popd > /dev/null
 
-. $SRC_DIR/ci/common.sh
+. $SRC_DIR/ci/lib/common.sh
 
 mkdir build
 cd build

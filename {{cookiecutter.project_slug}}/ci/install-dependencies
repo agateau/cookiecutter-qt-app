@@ -12,7 +12,7 @@ QT_VERSION=5.12.8
 
 ECM_VERSION=5.69.0
 
-. $CI_DIR/common.sh
+. $CI_DIR/lib/common.sh
 
 add_env_var() {
     echo "export $1=$2" >> $ENV_FILE
