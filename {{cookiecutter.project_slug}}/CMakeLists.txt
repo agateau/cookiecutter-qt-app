@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project({{ cookiecutter.project_slug }}
     VERSION {{ cookiecutter.version }}
     DESCRIPTION "Opinionated Qt-based application template"
+    HOMEPAGE_URL "{{ cookiecutter.project_url }}"
 )
 include(CTest)
 
@@ -11,7 +12,6 @@ set(ORGANIZATION_NAME "{{ cookiecutter.organization_name }}")
 set(INVERSE_ORGANIZATION_NAME "{{ cookiecutter.organization_name.split('.')|reverse|join('.') }}")
 
 set(APP_HUMAN_NAME "{{ cookiecutter.project_name }}")
-set(APP_URL "{{ cookiecutter.project_url }}")
 
 set(APP_NAME ${PROJECT_NAME})
 set(APPLIB_NAME ${PROJECT_NAME}lib)
