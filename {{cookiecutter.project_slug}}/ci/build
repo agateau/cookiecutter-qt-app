@@ -32,3 +32,13 @@ fi
 
 echo_title Installing
 $BUILD_CMD --target install
+
+echo_title "Creating binary packages"
+$BUILD_CMD --target package
+
+if is_linux ; then
+    # No need to build the source package everywhere, arbitrarily decide to
+    # build it on Linux
+    echo_title "Creating source package"
+    $BUILD_CMD --target package_source
+fi
