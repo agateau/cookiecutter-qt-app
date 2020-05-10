@@ -18,7 +18,7 @@ echo_title Updating translations
 cmake --build . --target lupdate
 
 echo_title Building
-cmake --build .
+cmake --build . --parallel $NPROC
 
 echo_title Running tests
 test_cmd="cmake --build . --target check"

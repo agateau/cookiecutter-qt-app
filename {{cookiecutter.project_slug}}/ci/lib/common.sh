@@ -47,3 +47,9 @@ detect_python() {
 
 detect_os
 detect_python
+
+if is_macos ; then
+    NPROC=$(sysctl -n hw.ncpu)
+else
+    NPROC=$(nproc)
+fi
