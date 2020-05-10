@@ -39,26 +39,4 @@ if (BUILD_TESTING)
     enable_testing() # must come *before* adding tests directory
     add_subdirectory(tests)
 endif()
-
-# Packaging
-set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
-set(CPACK_PACKAGE_CONTACT "${AUTHOR_NAME} <${AUTHOR_EMAIL}>")
-
-set(CPACK_GENERATOR "DEB;RPM")
-set(CPACK_SOURCE_GENERATOR "TBZ2")
-
-## DEB config
-set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE ${APP_URL})
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-
-## RPM config
-set(CPACK_RPM_FILE_NAME "RPM-DEFAULT")
-set(CPACK_RPM_PACKAGE_URL ${APP_URL})
-
-## Source config
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
-set(CPACK_SOURCE_IGNORE_FILES "/build/;/.git/;/__pycache__/;~$")
-include(CPack)
+add_subdirectory(packaging)
