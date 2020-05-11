@@ -57,11 +57,15 @@ install_qt() {
 
 install_linux_packages() {
     echo_title "Installing Linux packages"
-    sudo apt-get install -y --no-install-recommends \
-        extra-cmake-modules \
-        qtbase5-dev \
-        qttools5-dev \
-        xvfb
+    if has_command apt-get ; then
+        $RUN_AS_ROOT apt-get install -y --no-install-recommends \
+            extra-cmake-modules \
+            qtbase5-dev \
+            qttools5-dev \
+            xvfb
+    else
+        die "Sorry, I don't know how to install the required packages on your distribution."
+    fi
 }
 
 install_ecm() {

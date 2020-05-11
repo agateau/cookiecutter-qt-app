@@ -45,8 +45,34 @@ detect_python() {
     fi
 }
 
+has_command() {
+    command -v "$1" > /dev/null 2>&1
+}
+
+die() {
+    echo "$*" >&2
+    exit 1
+}
+
+init_run_as_root() {
+    RUN_AS_ROOT=""
+    if is_windows ; then
+        return
+    fi
+    if [ $(id -u) = "0" ] ; then
+        # Already root
+        return
+    fi
+    if has_command sudo ; then
+        RUN_AS_ROOT=sudo
+    else
+        RUN_AS_ROOT="su -c"
+    fi
+}
+
 detect_os
 detect_python
+init_run_as_root
 
 if is_macos ; then
     NPROC=$(sysctl -n hw.ncpu)
