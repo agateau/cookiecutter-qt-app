@@ -44,7 +44,7 @@ target_link_libraries(${APPLIB_NAME}
 add_executable(${APP_NAME} MACOSX_BUNDLE main.cpp)
 
 set_target_properties(${APP_NAME} PROPERTIES
-    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/packaging/macos/Info.plist.in
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/macos/Info.plist.in
 )
 
 target_link_libraries(${APP_NAME}
@@ -57,7 +57,9 @@ install(
     DESTINATION bin
 )
 
-install(FILES packaging/linux/${APP_NAME}.desktop
-    DESTINATION share/applications
-    RENAME ${INVERSE_ORGANIZATION_NAME}.${APP_NAME}.desktop
-)
+if (UNIX AND NOT APPLE)
+    install(FILES linux/${APP_NAME}.desktop
+        DESTINATION share/applications
+        RENAME ${INVERSE_ORGANIZATION_NAME}.${APP_NAME}.desktop
+    )
+endif()
