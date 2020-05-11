@@ -11,10 +11,12 @@ popd > /dev/null
 mkdir build
 cd build
 
-BUILD_CMD="cmake --build ."
+BUILD_TYPE=Release
+
+BUILD_CMD="cmake --build . --config $BUILD_TYPE"
 
 echo_title Configuring
-cmake -DCMAKE_INSTALL_PREFIX=../inst ..
+cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=../inst ..
 
 echo_title Updating translations
 $BUILD_CMD --target lupdate
