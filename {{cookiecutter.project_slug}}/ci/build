@@ -11,17 +11,19 @@ popd > /dev/null
 mkdir build
 cd build
 
+BUILD_CMD="cmake --build ."
+
 echo_title Configuring
 cmake -DCMAKE_INSTALL_PREFIX=../inst ..
 
 echo_title Updating translations
-cmake --build . --target lupdate
+$BUILD_CMD --target lupdate
 
 echo_title Building
-cmake --build . --parallel $NPROC
+$BUILD_CMD --parallel $NPROC
 
 echo_title Running tests
-test_cmd="cmake --build . --target check"
+test_cmd="$BUILD_CMD --target check"
 if is_linux && [ -z "${DISPLAY:-}" ] ; then
     xvfb-run $test_cmd
 else
@@ -29,5 +31,14 @@ else
 fi
 
 echo_title Installing
-cmake --build . --target install
+$BUILD_CMD --target install
 
+echo_title "Creating binary packages"
+$BUILD_CMD --target package
+
+if is_linux ; then
+    # No need to build the source package everywhere, arbitrarily decide to
+    # build it on Linux
+    echo_title "Creating source package"
+    $BUILD_CMD --target package_source
+fi

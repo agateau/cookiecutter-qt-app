@@ -27,3 +27,7 @@ jobs:
       - name: Build
         run: ci/build
         shell: bash
+      - uses: actions/upload-artifact@v2
+        with:
+          name: packages
+          path: _work/qt-app/build/qt-app[-_]*.*
