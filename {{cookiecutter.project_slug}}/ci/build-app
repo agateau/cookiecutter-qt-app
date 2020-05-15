@@ -8,15 +8,17 @@ popd > /dev/null
 
 . $SRC_DIR/ci/lib/common.sh
 
-mkdir build
-cd build
+BUILD_DIR=$SRC_DIR/build
+INSTALL_DIR=$SRC_DIR/inst
 
 BUILD_TYPE=Release
 
 BUILD_CMD="cmake --build . --config $BUILD_TYPE"
 
 echo_title Configuring
-cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=../inst ..
+mkdir $BUILD_DIR
+cd $BUILD_DIR
+cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR $SRC_DIR
 
 echo_title Updating translations
 $BUILD_CMD --target lupdate
