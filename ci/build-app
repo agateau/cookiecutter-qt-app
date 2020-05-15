@@ -25,4 +25,4 @@ echo_title "Running the cookie CI scripts"
 cd qt-app
 ci/install-dependencies deps_dir
 . deps_dir/env.sh
-ci/build
+ci/build-app
