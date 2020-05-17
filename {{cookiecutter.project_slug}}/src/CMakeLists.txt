@@ -41,7 +41,7 @@ target_link_libraries(${APPLIB_NAME}
 )
 
 # App executable
-add_executable(${APP_NAME} MACOSX_BUNDLE main.cpp)
+add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE main.cpp)
 
 set_target_properties(${APP_NAME} PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/macos/Info.plist.in
