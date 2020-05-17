@@ -5,8 +5,8 @@
 #include "ui_MainWindow.h"
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
-    setWindowTitle(APP_HUMAN_NAME);
     ui->setupUi(this);
+    setWindowTitle(APP_HUMAN_NAME);
     setupActions();
 }
 
