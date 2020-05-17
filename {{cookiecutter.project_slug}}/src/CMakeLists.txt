@@ -63,3 +63,8 @@ if (UNIX AND NOT APPLE)
         RENAME ${INVERSE_ORGANIZATION_NAME}.${APP_NAME}.desktop
     )
 endif()
+
+if (WIN32)
+    include(DeployQt)
+    windeployqt(${APP_NAME})
+endif()
