@@ -69,7 +69,6 @@ function(macdeployqt target)
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND "${MACDEPLOYQT_EXECUTABLE}"
             \"$<TARGET_FILE_DIR:${target}>/../..\"
-            -always-overwrite
         COMMENT "Deploying Qt..."
     )
 endfunction()

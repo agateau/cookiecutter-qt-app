@@ -68,3 +68,8 @@ if (WIN32)
     include(DeployQt)
     windeployqt(${APP_NAME})
 endif()
+
+if (APPLE)
+    include(DeployQt)
+    macdeployqt(${APP_NAME})
+endif()
