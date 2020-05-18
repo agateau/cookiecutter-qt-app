@@ -21,7 +21,7 @@ As a developer you also get:
 
 ## Continuous Integration support
 
-The created app comes with a `ci` directory containing scripts to help you setup continuous integration. You can learn more about it in [doc/ci.md][].
+The created app comes with a `ci` directory containing scripts to help you setup continuous integration. You can learn more about it in [docs/ci.md][].
 
 ## CI for the cookiecutter itself
 
