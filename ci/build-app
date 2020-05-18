@@ -7,22 +7,75 @@ pushd $PWD > /dev/null
 cd $(dirname $0)/..
 SRC_DIR=$PWD
 popd > /dev/null
+
+WORK_DIR=$SRC_DIR/_work
+DEPS_DIR=$SRC_DIR/_deps
+
 PROJECT_DIR="$SRC_DIR/{{cookiecutter.project_slug}}"
+
 
 . $PROJECT_DIR/ci/lib/common.sh
 
-echo_title "Installing cookiecutter"
-$PYTHON_CMD -m pip install --upgrade pip setuptools
-$PYTHON_CMD -m pip install cookiecutter==$COOKIECUTTER_VERSION
+REUSE_DEPS=0
 
-echo_title "Cutting the cookie"
-rm -rf _work
-mkdir _work
-cd _work
-$PYTHON_CMD -m cookiecutter $SRC_DIR --no-input
+usage() {
+    if [ "$*" != "" ] ; then
+        echo "Error: $*"
+    fi
 
-echo_title "Running the cookie CI scripts"
-cd qt-app
-ci/install-dependencies deps_dir
-. deps_dir/env.sh
-ci/build-app
+    cat << EOF
+Usage: $PROGNAME [OPTION ...]
+Create an app from the cookiecutter and build it.
+
+Options:
+  -h, --help    display this usage message and exit
+  --reuse-deps  reuse already existing dependencies directory
+EOF
+
+    exit 1
+}
+
+parse_args() {
+    while [ $# -gt 0 ] ; do
+        case "$1" in
+        -h|--help)
+            usage
+            ;;
+        --reuse-deps)
+            REUSE_DEPS=1
+            ;;
+        *)
+            usage "Invalid argument"
+            ;;
+        esac
+        shift
+    done
+}
+
+build() {
+    echo_title "Installing cookiecutter"
+    $PYTHON_CMD -m pip install --upgrade pip setuptools
+    $PYTHON_CMD -m pip install cookiecutter==$COOKIECUTTER_VERSION
+
+    echo_title "Cutting the cookie"
+    rm -rf "$WORK_DIR"
+    mkdir "$WORK_DIR"
+    cd "$WORK_DIR"
+    $PYTHON_CMD -m cookiecutter "$SRC_DIR" --no-input
+
+    echo_title "Running the cookie CI scripts"
+    cd qt-app
+    if [ $REUSE_DEPS -eq 1 ] ; then
+        if [ ! -d $DEPS_DIR ] ; then
+            die "$DEPS_DIR does not exist, run the script without --reuse-deps to create it"
+        fi
+    else
+        rm -rf "$DEPS_DIR"
+        ci/install-dependencies "$DEPS_DIR"
+    fi
+    . "$DEPS_DIR/env.sh"
+    ci/build-app
+}
+
+parse_args $@
+build
