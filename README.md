@@ -15,7 +15,7 @@ By real-world I mean that out of the box you get:
 As a developer you also get:
 
 - Unit-testing, using [Catch2][]
-- Code formatting, using clang-format
+- Code formatting, using clang-format (TODO)
 
 [Catch2]: https://github.com/catchorg/Catch2
 
