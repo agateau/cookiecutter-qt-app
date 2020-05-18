@@ -11,7 +11,7 @@ set(AUTHOR_EMAIL "{{ cookiecutter.email }}")
 set(ORGANIZATION_NAME "{{ cookiecutter.organization_name }}")
 set(INVERSE_ORGANIZATION_NAME "{{ cookiecutter.organization_name.split('.')|reverse|join('.') }}")
 
-set(APP_HUMAN_NAME "{{ cookiecutter.project_name }}")
+set(APP_HUMAN_NAME "{{ cookiecutter.project_name|replace('-', ' ')|title }}")
 
 set(APP_NAME ${PROJECT_NAME})
 set(APPLIB_NAME ${PROJECT_NAME}lib)
