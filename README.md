@@ -45,11 +45,11 @@ Right now the template supports:
 
 - Linux .deb packages
 - Linux .rpm packages
+- Windows installers
 
 But the goal is to add:
 
+- macOS dmg
 - Linux AppImage
 - Linux Snaps
 - Linux FlatPak
-- Windows installers
-- macOS dmg
