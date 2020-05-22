@@ -34,10 +34,14 @@ Right now the template supports:
 - Linux .deb packages
 - Linux .rpm packages
 - Windows installers
+- macOS dmg
 
 But the goal is to add:
 
-- macOS dmg
 - Linux AppImage
 - Linux Snaps
 - Linux FlatPak
+
+To generate these installers, build the `package` target.
+
+You can also generate a source archive using the `package_source` target.

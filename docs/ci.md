@@ -56,6 +56,6 @@ On macOS:
 
 On Windows:
 
-- MSVC 2017
+- MSVC 2017. The reason for picking MSVC instead of MinGW is that Qt MSVC packages are much smaller than MinGW ones, making builds faster in situations where the CI must install Qt for each build.
 - git
 - NSIS 3.x
