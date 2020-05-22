@@ -4,7 +4,7 @@ This is a [cookiecutter][] to build Qt applications, based on my own preferences
 
 [cookiecutter]: https://github.com/audreyr/cookiecutter
 
-The goal of this cutter is to make it easy to create real-world stand-alone applications, installable on Linux, macOS and Windows.
+The goal of this cookiecutter is to make it easy to create real-world, stand-alone applications, installable on Linux, macOS and Windows.
 
 By real-world I mean that out of the box you get:
 
@@ -19,9 +19,11 @@ As a developer you also get:
 
 [Catch2]: https://github.com/catchorg/Catch2
 
+More details on dependencies in [docs/dependencies.md](docs/dependencies.md).
+
 ## Continuous Integration support
 
-The created app comes with a `ci` directory containing scripts to help you setup continuous integration. You can learn more about it in [docs/ci.md][].
+The created app comes with a `ci` directory containing scripts to help you setup continuous integration. You can learn more about it in [docs/ci.md](docs/ci.md).
 
 ## CI for the cookiecutter itself
 
