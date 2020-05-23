@@ -1,3 +1,7 @@
+# Use this version because it adds support for the --archives option
+AQTINSTALL_VERSION=git+https://github.com/miurahr/aqtinstall#v0.9.0b3
+AQTINSTALL_ARCHIVES="qtbase qtimageformats qtsvg qttranslations qttools"
+
 install_qt() {
     echo_title "Installing Qt"
     local qt_install_dir=$INST_DIR/qt
@@ -8,8 +12,8 @@ install_qt() {
     if is_macos ; then
         aqt_args="mac desktop"
     fi
-    $PYTHON_CMD -m pip install aqtinstall
-    $PYTHON_CMD -m aqt install --outputdir $qt_install_dir $QT_VERSION $aqt_args
+    $PYTHON_CMD -m pip install $AQTINSTALL_VERSION
+    $PYTHON_CMD -m aqt install --outputdir $qt_install_dir $QT_VERSION $aqt_args --archives $AQTINSTALL_ARCHIVES
     if is_windows ; then
         # Add Qt bin dir to $PATH so that tests can find Qt dlls
         prepend_path $(find $qt_install_dir -type d -a -name bin)
