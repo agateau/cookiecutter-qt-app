@@ -13,7 +13,6 @@ DEPS_DIR=$SRC_DIR/_deps
 
 PROJECT_DIR="$SRC_DIR/{{cookiecutter.project_slug}}"
 
-
 . $PROJECT_DIR/ci/lib/common.sh
 
 REUSE_DEPS=0
@@ -24,7 +23,7 @@ usage() {
     fi
 
     cat << EOF
-Usage: $PROGNAME [OPTION ...]
+Usage: $(basename $0) [OPTION ...]
 Create an app from the cookiecutter and build it.
 
 Options:
