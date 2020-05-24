@@ -1,4 +1,5 @@
 include(translations)
+include(ECMAddAppIcon)
 
 add_subdirectory(icons)
 
@@ -41,7 +42,14 @@ target_link_libraries(${APPLIB_NAME}
 )
 
 # App executable
-add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE main.cpp)
+set(APP_SRCS main.cpp)
+ecm_add_app_icon(
+    APP_SRCS
+    ICONS
+        icons/256-apps-${APP_NAME}.png
+        icons/sc-apps-${APP_NAME}.svg
+)
+add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE ${APP_SRCS})
 
 if (APPLE)
     configure_file(
