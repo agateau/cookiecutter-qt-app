@@ -68,8 +68,8 @@ target_link_libraries(${APP_NAME}
 # Install
 install(
     TARGETS ${APP_NAME}
-    BUNDLE DESTINATION . COMPONENT Runtime
-    RUNTIME DESTINATION bin COMPONENT Runtime
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION bin
 )
 
 if (UNIX AND NOT APPLE)
