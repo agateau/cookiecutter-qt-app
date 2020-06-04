@@ -5,6 +5,7 @@ add_custom_target(check
 add_executable(tests
     tests.cpp
     ExampleTest.cpp
+    TestUtils.cpp
 )
 
 target_link_libraries(tests
