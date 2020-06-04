@@ -87,6 +87,6 @@ This cookiecutter has a CI setup itself. It works by first running `cookiecutter
 
 ## Documentation
 
-- Dependencies: [docs/dependencies.md](docs/dependencies.md).
-- CI: [docs/ci.md](docs/ci.md).
-
+- Dependencies: [docs/dependencies.md](docs/dependencies.md)
+- CI: [docs/ci.md](docs/ci.md)
+- Unit-tests: [docs/tests.md](docs/tests.md)
