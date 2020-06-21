@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "SettingsDialog.h"
-#include "TestUtils.h"
+#include "Catch2QtUtils.h"
 
 // Qt
 #include <QAction>

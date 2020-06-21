@@ -4,8 +4,8 @@ add_custom_target(check
 
 add_executable(tests
     tests.cpp
+    Catch2QtUtils.cpp
     ExampleTest.cpp
-    TestUtils.cpp
 )
 
 target_link_libraries(tests

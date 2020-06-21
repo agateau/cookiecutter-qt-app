@@ -1,5 +1,5 @@
-#ifndef TESTUTILS_H
-#define TESTUTILS_H
+#ifndef CATCH2QTUTILS_H
+#define CATCH2QTUTILS_H
 
 // Qt
 #include <QApplication>
@@ -33,4 +33,4 @@ static T waitForActiveWindow(int timeout = 5000) {
 std::ostream& operator<<(std::ostream& ostr, const QString& str);
 std::ostream& operator<<(std::ostream& ostr, const QUrl& url);
 
-#endif // TESTUTILS_H
+#endif // CATCH2QTUTILS_H
