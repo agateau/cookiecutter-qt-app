@@ -12,19 +12,12 @@ configure_file(
 set(APPLIB_SRCS
     MainWindow.cpp
     MainWindow.ui
+    Resources.cpp
     SettingsDialog.cpp
     SettingsDialog.ui
 )
 
 qt5_add_resources(APPLIB_RESOURCES_SRCS app.qrc)
-
-# Translations
-set(TS_FILES
-    translations/app_fr.ts
-    translations/app_es.ts
-)
-add_translations_build_target(TRANSLATIONS_RESOURCES_SRCS ${TS_FILES})
-add_lupdate_target(SOURCES ${APPLIB_SRCS} TS_FILES ${TS_FILES} OPTIONS -no-obsolete)
 
 # App library
 add_library(${APPLIB_NAME} STATIC
@@ -40,6 +33,17 @@ target_link_libraries(${APPLIB_NAME}
     Qt5::Core
     Qt5::Widgets
 )
+
+# Translations
+set(TS_FILES
+    translations/${APP_NAME}_fr.ts
+    translations/${APP_NAME}_es.ts
+)
+qt5_add_translation(QM_FILES ${TS_FILES})
+add_custom_target(build_qm DEPENDS ${QM_FILES})
+add_dependencies(${APPLIB_NAME} build_qm)
+
+add_lupdate_target(SOURCES ${APPLIB_SRCS} TS_FILES ${TS_FILES} OPTIONS -no-obsolete)
 
 # App executable
 set(APP_SRCS main.cpp)
@@ -69,7 +73,12 @@ target_link_libraries(${APP_NAME}
 install(
     TARGETS ${APP_NAME}
     BUNDLE DESTINATION .
-    RUNTIME DESTINATION bin
+    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+)
+
+install(
+    FILES ${QM_FILES}
+    DESTINATION ${DATA_INSTALL_DIR}/translations
 )
 
 if (UNIX AND NOT APPLE)
