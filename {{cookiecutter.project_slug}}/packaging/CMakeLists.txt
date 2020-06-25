@@ -32,7 +32,7 @@ if (WIN32)
     set(CPACK_NSIS_DISPLAY_NAME ${APP_HUMAN_NAME})
     set(CPACK_NSIS_URL_INFO_ABOUT ${APP_URL})
     set(CPACK_NSIS_CREATE_ICONS_EXTRA
-        "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${APP_HUMAN_NAME}.lnk' '$INSTDIR\\\\bin\\\\${APP_NAME}.exe'")
+        "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${APP_HUMAN_NAME}.lnk' '$INSTDIR\\\\${APP_NAME}.exe'")
     set(CPACK_NSIS_DELETE_ICONS_EXTRA
         "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${APP_HUMAN_NAME}.lnk'")
 endif()

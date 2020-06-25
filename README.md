@@ -8,7 +8,7 @@ This is a [cookiecutter][] to build Qt applications, based on my own preferences
 
 The goal of this cookiecutter is to make it easier to create real-world, stand-alone applications, installable on Linux, macOS and Windows.
 
-Real-world appications means that out of the box you get:
+Real-world applications means that out of the box you get:
 
 - Support for translations
 - Creation of packages/installers for all platforms (WIP, see below)

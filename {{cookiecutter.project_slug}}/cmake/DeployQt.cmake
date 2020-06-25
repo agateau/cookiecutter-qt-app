@@ -59,7 +59,7 @@ function(windeployqt target)
     # "deployqt" directory in our destination directory
     install(
         DIRECTORY ${PROJECT_BINARY_DIR}/deployqt/
-        DESTINATION bin
+        DESTINATION ${BIN_INSTALL_DIR}
     )
 endfunction()
 
