@@ -1,5 +1,7 @@
 # cookiecutter-qt-app
 
+![main](https://github.com/agateau/cookiecutter-qt-app/workflows/main/badge.svg)
+
 ## What is this?
 
 This is a [cookiecutter][] to build Qt applications, based on my own preferences.
