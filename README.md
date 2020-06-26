@@ -4,18 +4,19 @@
 
 ## What is this?
 
-This is a [cookiecutter][] to build Qt applications, based on my own preferences.
+[Cookiecutter][cookiecutter] is a command-line tool to create projects from project templates. This repository contains a template to build a Qt application.
 
 [cookiecutter]: https://github.com/audreyr/cookiecutter
 
-The goal of this cookiecutter is to make it easier to create real-world, stand-alone applications, installable on Linux, macOS and Windows.
+The application created with this template is not a simple "Hello World", the goal is to produce a useful base for a "real world" application.
 
-Real-world applications means that out of the box you get:
+By "real world" I mean the application comes with:
 
-- Support for translations
-- Creation of packages/installers for all platforms (WIP, see below)
+- Translation support
+- Installing data files, and code to find them on the disk
 - Desktop shortcuts
 - Unit-testing, using [Catch2][]
+- Packages/installers for Linux, macOS and Windows (WIP, see below)
 - Code formatting, using clang-format (TODO)
 
 [Catch2]: https://github.com/catchorg/Catch2
@@ -43,11 +44,13 @@ Install cookiecutter:
 pip install cookiecutter
 ```
 
-Create your app:
+Create your app by running:
 
 ```
 cookiecutter https://github.com/agateau/cookiecutter-qt-app
 ```
+
+and answering the questions.
 
 Your app skeleton is ready, time to build it:
 
@@ -55,9 +58,12 @@ Your app skeleton is ready, time to build it:
 cd your_app_name
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_INSTALL_PREFIX=/where/to/install ..
 make
+make install
 ```
+
+Look in `/where/to/install`. Your app should be there, ready to be started. Try it.
 
 Run the tests:
 
