@@ -35,6 +35,15 @@ if (WIN32)
         "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${APP_HUMAN_NAME}.lnk' '$INSTDIR\\\\${APP_NAME}.exe'")
     set(CPACK_NSIS_DELETE_ICONS_EXTRA
         "Delete '$SMPROGRAMS\\\\$START_MENU\\\\${APP_HUMAN_NAME}.lnk'")
+
+    # Setting CPACK_NSIS_EXECUTABLES_DIRECTORY is required for
+    # CPACK_NSIS_MUI_FINISHPAGE_RUN to find the executable.
+    #
+    # If not set, the default path is $INSTDIR/bin
+    #
+    # cf http://cmake.3232098.n2.nabble.com/Problems-with-CPack-NSIS-and-CPACK-NSIS-MUI-FINISHPAGE-RUN-td7003656.html
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
+    set(CPACK_NSIS_MUI_FINISHPAGE_RUN "${APP_NAME}.exe")
 endif()
 
 if (APPLE)
