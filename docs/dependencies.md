@@ -1,10 +1,14 @@
 # Dependencies
 
-The generated app depends on the following packages:
+The generated app *requires* the following dependencies to build:
 
 - Qt, the latest LTS version (as long as it remains available)
 - [Extra CMake Modules][ecm], to help with some of the packaging tasks
 - [Catch2][catch2], to write unit-tests
+
+And can use the following optional dependencies:
+
+- [ds_store][], macOS only: Python module to customize the layout of the Finder window for the generated DMG archive.
 
 ## QWidget usage
 
@@ -15,3 +19,4 @@ The app uses QWidget, so it does not include Qt Quick Controls 2. The reasons be
 
 [ecm]: https://api.kde.org/ecm/
 [catch2]: https://github.com/catchorg/Catch2/
+[ds_store]: https://pypi.org/project/ds_store/
