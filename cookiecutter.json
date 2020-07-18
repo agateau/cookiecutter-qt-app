@@ -12,5 +12,8 @@
         "BSD 3-Clause",
         "Apache License 2.0",
         "Other"
+    ],
+    "_copy_without_render": [
+        "packaging/macos/generate-ds-store"
     ]
 }
