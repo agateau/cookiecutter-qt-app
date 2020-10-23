@@ -31,6 +31,7 @@ static T waitForActiveWindow(int timeout = 5000) {
 
 // Let Catch know how to print some Qt types
 std::ostream& operator<<(std::ostream& ostr, const QString& str);
+std::ostream& operator<<(std::ostream& ostr, const QStringList& lst);
 std::ostream& operator<<(std::ostream& ostr, const QUrl& url);
 
 #endif // CATCH2QTUTILS_H
