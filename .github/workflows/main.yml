@@ -14,11 +14,34 @@ jobs:
           - ubuntu-18.04
           - macos-10.15
           - windows-2019
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v2
-      - name: Build
+
+      - name: Cut the cookie
         run: ci/build-app
-        shell: bash
+
+      - name: Install dependencies
+        run: _work/qt-app/ci/build-app install-dependencies
+
+      - name: Build
+        run: _work/qt-app/ci/build-app build
+
+      - name: Run tests
+        run: _work/qt-app/ci/build-app tests
+
+      - name: Install
+        run: _work/qt-app/ci/build-app install
+
+      - name: Create binary packages
+        run: _work/qt-app/ci/build-app binary-packages
+
+      - name: Create source package
+        run: _work/qt-app/ci/build-app source-package
+        if: ${{ matrix.os == 'ubuntu-18.04' }}
+
       - uses: actions/upload-artifact@v2
         with:
           name: packages
