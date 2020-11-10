@@ -3,12 +3,15 @@
 
 class QString;
 
+#include <optional>
+
 namespace Resources {
 
 /**
- * Return the path to a directory called name in the resources directory
+ * Return the path to a directory called name in the resources directory if
+ * it exists
  */
-QString findDir(const QString& name);
+std::optional<QString> findDir(const QString& name);
 
 } // namespace Resources
 

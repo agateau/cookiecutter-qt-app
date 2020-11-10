@@ -11,16 +11,14 @@
 #include "Resources.h"
 
 static void loadTranslations(QObject* parent) {
-    // Search in current path first, to give translators an easy way to test
-    // their translations
-    QStringList searchDirs = {QDir::currentPath(), Resources::findDir("translations")};
+    std::optional<QString> translationsDir = Resources::findDir("translations");
+    if (!translationsDir.has_value()) {
+        return;
+    }
     auto translator = new QTranslator(parent);
     QLocale locale;
-    for (const auto& dir : searchDirs) {
-        if (translator->load(locale, APP_NAME, "_", dir)) {
-            QCoreApplication::installTranslator(translator);
-            return;
-        }
+    if (translator->load(locale, APP_NAME, "_", translationsDir.value())) {
+        QCoreApplication::installTranslator(translator);
     }
 }
 
