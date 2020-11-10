@@ -1,48 +1,133 @@
 #!/bin/bash
 set -euo pipefail
 
+PROGNAME=$(basename $0)
+DESCRIPTION="
+Provides all the steps to build the application. This script is called by the
+CI to build the application, but you can run it on your local machine as well.
+"
+
 pushd $PWD > /dev/null
 cd $(dirname $0)/..
 SRC_DIR=$PWD
 popd > /dev/null
 
-. $SRC_DIR/ci/lib/common.sh
-
-BUILD_DIR=$SRC_DIR/build
-INSTALL_DIR=$SRC_DIR/inst
+CI_DIR=$SRC_DIR/ci
+WORK_DIR=${WORK_DIR:-$SRC_DIR/_work}
+BUILD_DIR=$WORK_DIR/build
+INSTALL_DIR=$WORK_DIR/install
+ENV_FILE=$WORK_DIR/env.sh
 
 BUILD_TYPE=Release
+BUILD_CMD="cmake --build $BUILD_DIR --config $BUILD_TYPE"
 
-BUILD_CMD="cmake --build . --config $BUILD_TYPE"
+. $CI_DIR/lib/common.sh
+# Call this function here because we need $OS to load the right
+# OS-dependencies.sh file
+detect_os
 
-echo_title Configuring
-mkdir $BUILD_DIR
-cd $BUILD_DIR
-cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR $SRC_DIR
+. $CI_DIR/lib/common-dependencies.sh
+. $CI_DIR/lib/$OS-dependencies.sh
 
-echo_title Updating translations
-$BUILD_CMD --target lupdate
+#- Build steps ----------------------------------------------------------------
+step_install-dependencies() {
+    echo_title "Installing dependencies"
+    # The install_dependencies() function can define environment variables to
+    # help the other steps do their work: adding directories to $PATH or
+    # defining the installation directory of libraries so that the build step
+    # can find them.
+    > $ENV_FILE
+    install_dependencies
+}
 
-echo_title Building
-$BUILD_CMD --parallel $NPROC
+step_build() {
+    echo_title Configuring
+    . $ENV_FILE
+    mkdir $BUILD_DIR
+    cd $BUILD_DIR
+    cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR $SRC_DIR
 
-echo_title Running tests
-test_cmd="$BUILD_CMD --target check"
-if is_linux && [ -z "${DISPLAY:-}" ] ; then
-    xvfb-run $SRC_DIR/ci/headless-test-helper $test_cmd
-else
-    $test_cmd
-fi
+    echo_title Updating translations
+    $BUILD_CMD --target lupdate
 
-echo_title Installing
-$BUILD_CMD --target install
+    echo_title Building
+    $BUILD_CMD --parallel $NPROC
+}
 
-echo_title "Creating binary packages"
-$BUILD_CMD --target package
+step_tests() {
+    echo_title Running tests
+    . $ENV_FILE
+    local test_cmd="$BUILD_CMD --target check"
+    if is_linux && [ -z "${DISPLAY:-}" ] ; then
+        xvfb-run $CI_DIR/lib/headless-test-helper $test_cmd
+    else
+        $test_cmd
+    fi
+}
 
-if is_linux ; then
-    # No need to build the source package everywhere, arbitrarily decide to
-    # build it on Linux
+step_install() {
+    echo_title Installing
+    $BUILD_CMD --target install
+}
+
+step_binary-packages() {
+    echo_title "Creating binary packages"
+    $BUILD_CMD --target package
+}
+
+step_source-package() {
     echo_title "Creating source package"
     $BUILD_CMD --target package_source
-fi
+}
+
+#- Main -----------------------------------------------------------------------
+check_step_exists() {
+    [ $(type -t "step_$1") = "function" ]
+}
+
+usage() {
+    if [ "$*" != "" ] ; then
+        echo "Error: $*"
+    fi
+
+    cat << EOF
+Usage: $PROGNAME [OPTION ...] [steps...]
+$DESCRIPTION
+Options:
+  -h, --help          display this usage message and exit
+
+Steps:
+EOF
+    grep '^step_[-a-z]*() {' $CI_DIR/$PROGNAME | sed -e 's/step_/  /' -e 's/() {//'
+
+    exit 1
+}
+
+main() {
+    init_run_as_root
+    init_nproc
+    init_python_cmd
+
+    steps=""
+    while [ $# -gt 0 ] ; do
+        case "$1" in
+        -h|--help)
+            usage
+            ;;
+        *)
+            check_step_exists $1 || usage "Unknown step '$1'"
+            steps="$steps step_$1"
+            ;;
+        esac
+        shift
+    done
+
+    mkdir -p $WORK_DIR
+    mkdir -p $INSTALL_DIR
+
+    for step in $steps ; do
+        $step
+    done
+}
+
+main $@

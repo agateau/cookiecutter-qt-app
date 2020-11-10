@@ -18,7 +18,7 @@ First: it's a good idea to keep your CI configuration independent from the parti
 
 For this reason there is no out-of-the-box integration for specific CI products like Travis, AppVeyor or GitHub actions.
 
-Second: components you depend on should not change behind your back. This way if the CI reports a breakage you know it's because of a change in your code, not because a library you depend on has been updated between the last build and the current one and is now causing a failure.
+Second: components you depend on should not change behind your back. This way if the CI reports a breakage you know it's because of a change in your code, not because a library you depend on has been updated between the previous build and the current one and is now causing a failure.
 
 This means depending on specific versions of components has much as possible. Rolling-release systems are certainly interesting on an individual machine, but I want stability on my build servers. On Linux systems, this is easy to achieve using a stable distribution such as Debian stable, Ubuntu LTS, Red Hat or CentOS. On macOS or Windows, it is unfortunately more complicated: the base OS does not provide a package system, and the third-party package systems do not let you specify the versions of the components you want to install (at least as far as I know, I would love to be proven wrong on this!)
 
@@ -26,15 +26,37 @@ This means depending on specific versions of components has much as possible. Ro
 
 The `ci` directory contains the following scripts:
 
-### `ci/install-dependencies <deps_dir>`
-
-Installs the required build dependencies in `<deps_dir>` and creates a file called `<deps_dir>/env.sh`, which can be sourced to setup a working build environment.
-
 ### `ci/build-app`
 
-Builds the app and all the relevant targets (tests, packaging...). It assumes the environment has been correctly setup, by sourcing the `<deps_dir>/env.sh` first.
+This is the main script. It expose the different build steps as command-line arguments. To get the supported build steps run the script with `--help`. You should get an output like this:
+
+```
+Usage: build-app [OPTION ...] [steps...]
+
+Provides all the steps to build the application. This script is called by the
+CI to build the application, but you can run it on your local machine as well.
+
+Options:
+  -h, --help          display this usage message and exit
+
+Steps:
+  install-dependencies
+  build
+  tests
+  install
+  binary-packages
+  source-package
+```
+
+If you want to execute the `install-dependencies` step, call `build-app install-dependencies`. You can have the script execute multiple steps in one call by adding all the steps to execute as arguments. Having separate build steps like this instead of one giant "build" step makes it possible to expose all the steps in your CI. This makes CI progress easier to track.
 
 Note: the script is not called `build` to avoid hours of wasted time wondering why your script is ignored because you added `build` to your root `.gitignore` file (been there, done that :))
+
+### `ci/lib/$OS-dependencies.sh`
+
+For each supported OS, there is a `ci/lib/$OS-dependencies.sh` file, which must define an `install_dependencies()` shell function. The job of this function is to install all the required build dependencies. Dependencies must be installed in the `$INSTALL_DIR` directory.
+
+Sometimes installing a dependency in the `$INSTALL_DIR` directory is not enough for the build system to make use of it. Some dependencies require adding a new directory to `$PATH` or defining a new environment variable. To handle this, there is the `$INSTALL_DIR/env.sh` file. This file is sourced by the `build` and `tests` steps. The `install_dependencies()` function can make use of the `prepend_path()` and `add_env_var()` functions defined in `ci/lib/common.sh` to add entries to `env.sh`.
 
 ### Caching
 

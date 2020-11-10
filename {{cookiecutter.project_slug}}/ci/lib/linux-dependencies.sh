@@ -1,5 +1,4 @@
-main() {
-    echo_title "Installing Linux packages"
+install_dependencies() {
     if has_command apt-get ; then
         $RUN_AS_ROOT apt-get update
         # file is needed by dpkg to generate shlib dependencies

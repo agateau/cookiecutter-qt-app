@@ -1,9 +1,19 @@
+# Functions shared between the $OS-dependencies.sh files
+
 AQTINSTALL_VERSION=0.9.0
 AQTINSTALL_ARCHIVES="qtbase qtimageformats qtsvg qttranslations qttools"
 
+QT_ARCH_WINDOWS=win64_msvc2017_64
+QT_ARCH_MACOS=clang_64
+QT_VERSION=5.12.8
+
+ECM_VERSION=5.69.0
+
+CMAKE_VERSION=3.17.\*
+
 install_qt() {
     echo_title "Installing Qt"
-    local qt_install_dir=$INST_DIR/qt
+    local qt_install_dir=$INSTALL_DIR/qt
     local aqt_args
     if is_windows ; then
         aqt_args="windows desktop $QT_ARCH_WINDOWS"
@@ -38,7 +48,7 @@ install_ecm() {
         mkdir build
         cd build
         cmake \
-            -DCMAKE_INSTALL_PREFIX=$INST_DIR \
+            -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
             -DBUILD_HTML_DOCS=OFF \
             -DBUILD_MAN_DOCS=OFF \
             -DBUILD_QTHELP_DOCS=OFF \
@@ -46,5 +56,34 @@ install_ecm() {
             ..
         cmake --build .
         cmake --build . --target install
+    )
+}
+
+install_prebuilt_archive() {
+    local url=$1
+    local sha1=$2
+    local download_file=$3
+    local unpack_dir=$4
+
+    echo "Downloading '$url'"
+    curl --location --continue-at - --output "$download_file" "$url"
+
+    echo "Checking integrity"
+    echo "$sha1 $download_file" | sha1sum --check
+
+    echo "Unpacking"
+    (
+        cd "$unpack_dir"
+        case "$download_file" in
+            *.zip)
+                unzip -q "$download_file"
+                ;;
+            *.tar.gz|*.tar.bz2|*.tar.xz)
+                tar xf "$download_file"
+                ;;
+            *)
+                die "Don't know how to unpack $download_file"
+                ;;
+        esac
     )
 }

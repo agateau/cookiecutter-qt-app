@@ -1,3 +1,5 @@
+# Utility functions used by the CI scripts
+
 echo_title() {
     echo "========================================="
     echo $*
@@ -46,19 +48,9 @@ die() {
     exit 1
 }
 
-mkabsdir() {
-    mkdir -p "$1"
-    pushd $PWD > /dev/null
-    cd "$1"
-    echo $PWD
-    pop > /dev/null
-}
-
 init_python_cmd() {
-    echo_title "Looking for a Python 3 + pip installation"
     for interpreter in python3 python ; do
         if $interpreter -m pip --version 2> /dev/null ; then
-            echo "Found $interpreter"
             export PYTHON_CMD=$interpreter
             return
         fi
@@ -82,41 +74,27 @@ init_run_as_root() {
     fi
 }
 
-install_prebuilt_archive() {
-    local url=$1
-    local sha1=$2
-    local download_file=$3
-    local unpack_dir=$4
-
-    echo "Downloading '$url'"
-    curl --location --continue-at - --output "$download_file" "$url"
-
-    echo "Checking integrity"
-    echo "$sha1 $download_file" | sha1sum --check
-
-    echo "Unpacking"
-    (
-        cd "$unpack_dir"
-        case "$download_file" in
-            *.zip)
-                unzip -q "$download_file"
-                ;;
-            *.tar.gz|*.tar.bz2|*.tar.xz)
-                tar xf "$download_file"
-                ;;
-            *)
-                die "Don't know how to unpack $download_file"
-                ;;
-        esac
-    )
+init_nproc() {
+    if is_macos ; then
+        NPROC=$(sysctl -n hw.ncpu)
+    else
+        NPROC=$(nproc)
+    fi
 }
 
-detect_os
-init_python_cmd
-init_run_as_root
+# Insert a new directory at the beginning of $PATH in env.sh
+#
+# $1 the directory to insert
+prepend_path() {
+    echo "export PATH=\"$1:\$PATH\"" >> $ENV_FILE
+}
 
-if is_macos ; then
-    NPROC=$(sysctl -n hw.ncpu)
-else
-    NPROC=$(nproc)
-fi
+# Define a new environment variable in env.sh
+#
+# $1 name of the variable
+# $2 value of the variable
+add_env_var() {
+    local var=$1
+    local value=$2
+    echo "export $var=\"$value\"" >> $ENV_FILE
+}
