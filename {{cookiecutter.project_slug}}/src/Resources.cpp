@@ -21,24 +21,36 @@ public:
         qWarning() << "Can't find data dir, has the app been installed?";
     }
 
-    QString findDir(const QString& name) const {
-        return mDataDir.filePath(name);
+    std::optional<QString> findDir(const QString& name) const {
+        if (!mDataDir.has_value()) {
+            return {};
+        }
+        auto path = mDataDir.value().filePath(name);
+        if (!QFile::exists(path)) {
+            qWarning() << "Can't find" << name << "in" << mDataDir.value().absolutePath();
+            return {};
+        }
+        return path;
     }
 
 private:
     bool tryPath(const QString& path) {
-        mDataDir = QDir(path);
-        return mDataDir.exists();
+        QDir dir(path);
+        if (!dir.exists()) {
+            return false;
+        }
+        mDataDir = dir;
+        return true;
     }
 
-    QDir mDataDir;
+    std::optional<QDir> mDataDir;
 };
 
 Q_GLOBAL_STATIC(ResourcesInfo, info)
 
 namespace Resources {
 
-QString findDir(const QString& name) {
+std::optional<QString> findDir(const QString& name) {
     return info()->findDir(name);
 }
 
