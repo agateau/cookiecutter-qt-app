@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.0 - 2020-11-11
+
+### Added
+
+- Documented translation system (#11)
+- Catch2QtUtils: Added support for QStringList
+
+### Changed
+
+- Translations are no longer bundled with the application binary (#7)
+- Simplified build scripts (#21)
+- Improved the icons layout in macOS dmg (#13)
+- Windows installer now lets the user start the app at the end (#16)
+- Renamed TestUtils to Catch2QtUtils
+
 ## 0.3.0 - 2020-06-05
 
 ### Added
