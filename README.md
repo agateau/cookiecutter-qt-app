@@ -52,7 +52,7 @@ cookiecutter https://github.com/agateau/cookiecutter-qt-app
 
 and answering the questions.
 
-Your app skeleton is ready, time to build it:
+Your app skeleton is now ready, time to build it:
 
 ```
 cd your_app_name
@@ -63,15 +63,15 @@ make
 make install
 ```
 
-Look in `/where/to/install`. Your app should be there, ready to be started. Try it.
+Look in `/where/to/install`. Your app should be there, ready to be started. Give it a try!
 
-Run the tests:
+Your app source code comes with some unit-tests. You can run them with:
 
 ```
 make check
 ```
 
-You are all set, time to turn this skeleton into a real app.
+You are all set, time to turn this skeleton into a real app!
 
 ## Creating packages
 
