@@ -16,5 +16,5 @@ target_link_libraries(tests
 
 add_test(NAME tests COMMAND tests)
 
-# Before running tests, make sure tests they are built if necessary
+# Before running tests, make sure they are built if necessary
 add_dependencies(check tests)
