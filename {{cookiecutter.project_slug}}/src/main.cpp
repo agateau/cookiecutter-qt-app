@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     app.setOrganizationName(ORGANIZATION_NAME);
     app.setApplicationName(APP_NAME);
     app.setApplicationVersion(APP_VERSION);
-    auto iconName = QString(":/icons/sc-apps-%1.svg").arg(APP_NAME);
+    auto iconName = QString(":/appicon/sc-apps-%1.svg").arg(APP_NAME);
     app.setWindowIcon(QIcon(iconName));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
