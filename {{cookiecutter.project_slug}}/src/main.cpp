@@ -22,15 +22,28 @@ static void loadTranslations(QObject* parent) {
     }
 }
 
+/**
+ * Initialize QIcon so that QIcon::fromTheme() finds our icons on Windows and macOS
+ */
+static void initFallbackIcons() {
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_MACOS)
+    // A theme name must be defined othewise QIcon::fromTheme won't look in fallbackSearchPaths
+    QIcon::setThemeName(APP_NAME);
+    QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << ":/icons");
+#endif
+}
+
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     Q_INIT_RESOURCE(app);
     app.setOrganizationName(ORGANIZATION_NAME);
     app.setApplicationName(APP_NAME);
     app.setApplicationVersion(APP_VERSION);
-    auto iconName = QString(":/icons/sc-apps-%1.svg").arg(APP_NAME);
+    auto iconName = QString(":/appicon/sc-apps-%1.svg").arg(APP_NAME);
     app.setWindowIcon(QIcon(iconName));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    initFallbackIcons();
 
     loadTranslations(&app);
 

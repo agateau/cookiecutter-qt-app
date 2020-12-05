@@ -1,7 +1,7 @@
 include(translations)
 include(ECMAddAppIcon)
 
-add_subdirectory(icons)
+add_subdirectory(appicon)
 
 # Sources
 configure_file(
@@ -51,8 +51,8 @@ set(APP_SRCS main.cpp)
 ecm_add_app_icon(
     APP_SRCS
     ICONS
-        icons/256-apps-${APP_NAME}.png
-        icons/sc-apps-${APP_NAME}.svg
+        appicon/256-apps-${APP_NAME}.png
+        appicon/sc-apps-${APP_NAME}.svg
 )
 add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE ${APP_SRCS})
 
