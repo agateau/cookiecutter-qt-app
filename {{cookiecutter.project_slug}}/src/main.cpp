@@ -34,8 +34,6 @@ static void initFallbackIcons() {
 }
 
 int main(int argc, char* argv[]) {
-    initFallbackIcons();
-
     QApplication app(argc, argv);
     Q_INIT_RESOURCE(app);
     app.setOrganizationName(ORGANIZATION_NAME);
@@ -44,6 +42,8 @@ int main(int argc, char* argv[]) {
     auto iconName = QString(":/appicon/sc-apps-%1.svg").arg(APP_NAME);
     app.setWindowIcon(QIcon(iconName));
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    initFallbackIcons();
 
     loadTranslations(&app);
 
